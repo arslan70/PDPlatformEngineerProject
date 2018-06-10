@@ -2,7 +2,8 @@
   "requires": true,
   "lockfileVersion": 1,
   "dependencies": {
-    "aws-sns-publish": "^3.2.0"
+    "aws-sns-publish": "^3.2.0",
+    "serverless": "^1.27.3"
   },
   "name": "pdplatformengineerproject",
   "description": "https://github.com/IntuitiveWebSolutions/PDPlatformEngineerProject",
