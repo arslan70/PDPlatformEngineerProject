@@ -1,0 +1,37 @@
+service: PDPlatformEngineerProject
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  iamRoleStatements:
+    -  Effect: "Allow"
+       Action:
+         - "sns:Publish"
+         - "sns:Subscribe"
+         - "sns:Unsubscribe"
+         - "sns:ListSubscriptionsByTopic"
+       Resource:
+         - "arn:aws:sns:us-east-1:392467327966:DailyDadJokesTopic"
+
+functions:
+  sendDailyDadJoke:
+    handler: send_notification.sendDailyDadJoke
+    events:
+      # Invoke the Lambda function everyday
+      - schedule: rate(1 day)
+  subscribe:
+    handler: subscribe.subscribe
+    events:
+      - http:
+          path: api/subscribe
+          method: post
+          integration: lambda
+          cors: true  
+  unsubscribe:
+    handler: unsubscribe.unsubscribe
+    events:
+      - http:
+          path: api/unsubscribe
+          method: post
+          integration: lambda
+          cors: true  
