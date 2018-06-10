@@ -1,0 +1,24 @@
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "aws-sns-publish": "^3.2.0"
+  },
+  "name": "pdplatformengineerproject",
+  "description": "https://github.com/IntuitiveWebSolutions/PDPlatformEngineerProject",
+  "version": "1.0.0",
+  "main": "send_notification.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arslan70/PDPlatformEngineerProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arslan70/PDPlatformEngineerProject/issues"
+  },
+  "homepage": "https://github.com/arslan70/PDPlatformEngineerProject#readme"
+}
