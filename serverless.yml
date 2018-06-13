@@ -3,6 +3,8 @@ service: PDPlatformEngineerProject
 provider:
   name: aws
   runtime: nodejs6.10
+  environment:
+    SNSTopicARN: "${self:resources.Outputs.SNSTopicArn.Value}"
   iamRoleStatements:
     -  Effect: "Allow"
        Action:
@@ -11,7 +13,7 @@ provider:
          - "sns:Unsubscribe"
          - "sns:ListSubscriptionsByTopic"
        Resource:
-         - "arn:aws:sns:us-east-1:392467327966:DailyDadJokesTopic"
+         - "${self:resources.Outputs.SNSTopicArn.Value}"
 
 functions:
   sendDailyDadJoke:
@@ -35,3 +37,12 @@ functions:
           method: post
           integration: lambda
           cors: true  
+resources:
+  Resources:
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      
+  Outputs:
+    SNSTopicArn:
+      Value:
+        Ref: SNSTopic

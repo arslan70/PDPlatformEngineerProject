@@ -3,6 +3,13 @@
 module.exports.unsubscribe = (event, context, callback) => {
   var AWS = require('aws-sdk');
   var sns = new AWS.SNS();
+  var email = "";
+  try {
+    email = JSON.parse(event.body).email;//Lambda Proxy integration send body as string. Lambda integration will require API and Method level mapping
+  } catch (e) {
+    console.log("not JSON");
+    email = event.body.email;
+  }
   var response = {
     statusCode: 404,
     body: JSON.stringify({
@@ -12,7 +19,7 @@ module.exports.unsubscribe = (event, context, callback) => {
   };
 
   var params = {
-    TopicArn: 'arn:aws:sns:us-east-1:392467327966:DailyDadJokesTopic'
+    TopicArn: process.env.SNSTopicARN
   };
   sns.listSubscriptionsByTopic(params, function (err, data) {
     if (err) console.log(err, err.stack); // an error occurred
@@ -20,7 +27,7 @@ module.exports.unsubscribe = (event, context, callback) => {
       console.log("data:" + JSON.stringify(data));           // successful response
       data.Subscriptions.forEach(function (value) {
         console.log(value.Endpoint);
-        if (value.Endpoint == event.body.email) {
+        if (value.Endpoint == email) {
           console.log("Email address matched. Unsubscribing!")
           var params1 = {
             SubscriptionArn: value.SubscriptionArn

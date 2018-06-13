@@ -1,10 +1,17 @@
 'use strict';
 
 module.exports.subscribe = (event, context, callback) => {
+  var email = "";
+  try {
+    email = JSON.parse(event.body).email;//Lambda Proxy integration send body as string. Lambda integration will require API and Method level mapping
+  } catch (e) {
+    console.log("not JSON");
+    email = event.body.email;
+  }
   var params = {
     Protocol: 'email', /* required */
-    TopicArn: 'arn:aws:sns:us-east-1:392467327966:DailyDadJokesTopic', /* required */
-    Endpoint: event.body.email,
+    TopicArn: process.env.SNSTopicARN, /* required */
+    Endpoint: email,
   };
   var AWS = require('aws-sdk');
   var sns = new AWS.SNS();

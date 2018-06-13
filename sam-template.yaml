@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: A serverless stack using API Gateway, Lambda and SNS
+
+#Parameters:
+
+
+Resources:
+  
+  SNSTopic:
+    Type: AWS::SNS::Topic
+
+  SubscribeSendDailyDadJoke:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs6.10
+      Timeout: 10
+      Handler: subscribe.subscribe
+      CodeUri: ./
+      Environment:
+        Variables:
+          SNSTopicARN: !Ref "SNSTopic"
+          
+      Events:
+        PostSubscribeApiEndpoint:
+          Type: Api
+          Properties:
+            Path: /api/subscribe
+            Method: POST
+        
+      Policies:
+        -
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "sns:Subscribe"
+              Resource: !Ref "SNSTopic"
+            
+  UnSubscribeSendDailyDadJoke:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs6.10
+      Timeout: 10
+      Handler: unsubscribe.unsubscribe
+      CodeUri: ./
+      Environment:
+        Variables:
+          SNSTopicARN: !Ref "SNSTopic"
+          
+      Events:
+        PostSubscribeApiEndpoint:
+          Type: Api
+          Properties:
+            Path: /api/unsubscribe
+            Method: POST
+        
+      Policies:
+        -
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "sns:Unsubscribe"
+                - "sns:ListSubscriptionsByTopic"
+              Resource: !Ref "SNSTopic"
+            
+  SendDailyDadJoke:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs6.10
+      Timeout: 10
+      Handler: send_notification.sendDailyDadJoke
+      CodeUri: ./
+      Environment:
+        Variables:
+          SNSTopicARN: !Ref "SNSTopic"
+          
+      Events:
+        Schedule:
+          Type: Schedule
+          Properties:
+            Schedule: 'rate(1 day)'
+        
+      Policies:
+        -
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - "sns:Publish"
+              Resource: !Ref "SNSTopic"
+            

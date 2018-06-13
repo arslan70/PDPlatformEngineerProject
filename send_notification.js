@@ -19,7 +19,7 @@ module.exports.sendDailyDadJoke = (event, context, callback) => {
       console.log("joke returned from api:" + JSON.parse(chunk).joke);
       joke = JSON.parse(chunk).joke;
       if (joke != "") {
-        snsPublish(joke, { arn: 'arn:aws:sns:us-east-1:392467327966:DailyDadJokesTopic' }).then(messageId => {
+        snsPublish(joke, { arn: process.env.SNSTopicARN }).then(messageId => {
           console.log(messageId);
         });
         const response = {
