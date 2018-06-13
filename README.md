@@ -13,14 +13,14 @@ There are 2 ways to deploy this
 3) Using codebuild for continous integration
 
 
-*1- Deployment guide for serverless framework*
+**1- Deployment guide for serverless framework**
 
 serverless framework uses serverless.yaml file for deployment. 
 
 npm install -g serverless
 serverless deploy
 
-*2- Deployment guide using cloudformation *
+**2- Deployment guide using cloudformation**
 
 sam-template will be used to package and deploy the code into an s3 bucket.
 
@@ -31,7 +31,7 @@ sam package --template-file sam-template --output-template-file serverless-outpu
 3) The above command will generate a cloud formation template which you can use to create the stack
 
 
-*3- Codebuild for continous integration *
+**3- Codebuild for continous integration**
 Create a new build project in aws code build. Use this github repository as the source. 
 buildspec.yml has the instructions to deploy the stack
 
