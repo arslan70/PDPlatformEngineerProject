@@ -90,4 +90,27 @@ Resources:
               Action:
                 - "sns:Publish"
               Resource: !Ref "SNSTopic"
+  BasicDashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: PDPlatformEngineer-Dahsboard
+      DashboardBody: {"Fn::Join": ["",['{"widgets": [
+        {
+          "type": "metric",
+			    "properties": {
+				    "metrics": [["AWS/SNS", "NumberOfNotificationsDelivered","TopicName","'
+            , { Ref: SNSTopic },'"]],
+				    "title": "Total Notifications Delivered",
+				    "period": 60,
+					  "region":"us-east-2"
+			  }
+		  }]}']]}
+
+Outputs:
+    SNSTopicArn:
+      Value:
+        Ref: SNSTopic
+    MyStacksRegion:
+      Value:
+       !Ref "AWS::Region"
             
